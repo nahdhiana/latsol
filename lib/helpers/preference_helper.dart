@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:git_project/models/user_by_email.dart';
+import '../../../models/user_by_email.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceHelper {

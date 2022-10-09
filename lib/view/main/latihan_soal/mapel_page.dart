@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:git_project/models/mapel_list.dart';
-import 'package:git_project/view/main/latihan_soal/home_page.dart';
-import 'package:git_project/view/main/latihan_soal/paket_soal_page.dart';
+import '../../../models/mapel_list.dart';
+import '../../../view/main/latihan_soal/home_page.dart';
+import '../../../view/main/latihan_soal/paket_soal_page.dart';
 
 class MapelPage extends StatelessWidget {
   const MapelPage({Key? key, required this.mapel}) : super(key: key);

@@ -1,14 +1,14 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:git_project/constants/r.dart';
-import 'package:git_project/helpers/preference_helper.dart';
-import 'package:git_project/models/banner_list.dart';
-import 'package:git_project/models/mapel_list.dart';
-import 'package:git_project/models/network_response.dart';
-import 'package:git_project/models/user_by_email.dart';
-import 'package:git_project/repository/latihan_soal_api.dart';
-import 'package:git_project/view/main/latihan_soal/mapel_page.dart';
-import 'package:git_project/view/main/latihan_soal/paket_soal_page.dart';
+import '../../../constants/r.dart';
+import '../../../helpers/preference_helper.dart';
+import '../../../models/banner_list.dart';
+import '../../../models/mapel_list.dart';
+import '../../../models/network_response.dart';
+import '../../../models/user_by_email.dart';
+import '../../../repository/latihan_soal_api.dart';
+import '../../../view/main/latihan_soal/mapel_page.dart';
+import '../../../view/main/latihan_soal/paket_soal_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {

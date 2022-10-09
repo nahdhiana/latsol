@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:git_project/constants/api_url.dart';
-import 'package:git_project/helpers/user_email.dart';
-import 'package:git_project/models/network_response.dart';
+import '../../../constants/api_url.dart';
+import '../../../helpers/user_email.dart';
+import '../../../models/network_response.dart';
 
 class AuthApi {
   Dio dioApi() {

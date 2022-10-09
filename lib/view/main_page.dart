@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:git_project/constants/r.dart';
-import 'package:git_project/view/main/discussion/chat_page.dart';
-import 'package:git_project/view/main/latihan_soal/home_page.dart';
-import 'package:git_project/view/main/profile/profile_page.dart';
+import '../constants/r.dart';
+import '../view/main/discussion/chat_page.dart';
+import '../view/main/latihan_soal/home_page.dart';
+import '../view/main/profile/profile_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -15,6 +15,12 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final _pc = PageController();
   int index = 0;
+
+  @override
+  void dispose() {
+    _pc.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +40,6 @@ class _MainPageState extends State<MainPage> {
       body: PageView(
         controller: _pc,
         physics: const NeverScrollableScrollPhysics(),
-        
         children: const [
           HomePage(), //0
           // ChatPage(),
@@ -118,7 +123,6 @@ class _MainPageState extends State<MainPage> {
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeInOut,
                         );
-
                         setState(() {});
                       },
                       child: Column(
@@ -127,7 +131,6 @@ class _MainPageState extends State<MainPage> {
                             "assets/ic_profile.png",
                             height: 20,
                             color: index == 1 ? null : Colors.grey,
-
                           ),
                           const Text("Profile"),
                         ],

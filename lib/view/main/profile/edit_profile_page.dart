@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:git_project/constants/r.dart';
-import 'package:git_project/helpers/preference_helper.dart';
-import 'package:git_project/helpers/user_email.dart';
-import 'package:git_project/models/network_response.dart';
-import 'package:git_project/models/user_by_email.dart';
-import 'package:git_project/repository/auth_api.dart';
-import 'package:git_project/view/login_page.dart';
+import 'package:provider/provider.dart';
+
+import '../../../constants/r.dart';
+import '../../../helpers/preference_helper.dart';
+import '../../../models/network_response.dart';
+import '../../../models/user_by_email.dart';
+import '../../../providers/edit_profile_provider.dart';
+import '../../../repository/auth_api.dart';
+import '../../../view/login_page.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -14,43 +16,28 @@ class EditProfilePage extends StatefulWidget {
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
-enum Gender { lakiLaki, perempuan }
-
 class _EditProfilePageState extends State<EditProfilePage> {
-  List<String> classSlta = ["10", "11", "12"];
-
-  String gender = "Laki-laki";
-  String selectedClass = "10";
   final emailController = TextEditingController();
   final schoolNameController = TextEditingController();
   final fullNameController = TextEditingController();
 
-  onTapGender(Gender genderInput) {
-    if (genderInput == Gender.lakiLaki) {
-      gender = "Laki-laki";
-    } else {
-      gender = "Perempuan";
-    }
-    setState(() {});
-  }
-
-  initDataUSer() async {
-    emailController.text = UserEmail.getUserEmail()!;
-    // fullNameController.text = UserEmail.getUserDisplayName()!;
-   final dataUser = await PreferenceHelper().getUserData();
-    fullNameController.text = dataUser!.userName!;
-    schoolNameController.text = dataUser.userAsalSekolah!;
-    gender = dataUser.userGender!;
-    // selectedClass = dataUser.jenjang!;
-    print(dataUser.userGender!);
-
-    setState(() {});
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      final data = Provider.of<EditProfileProvider>(context, listen: false);
+      emailController.text = data.userEmail;
+      schoolNameController.text = data.school;
+      fullNameController.text = data.fullname;
+    });
+    super.initState();
   }
 
   @override
-  void initState() {
-    super.initState();
-    initDataUSer();
+  void dispose() {
+    emailController.dispose();
+    fullNameController.dispose();
+    schoolNameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,13 +65,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: ButtonLogin(
             radius: 8,
             onTap: () async {
+              final data =
+                  Provider.of<EditProfileProvider>(context, listen: false);
               final json = {
                 "email": emailController.text,
                 "nama_lengkap": fullNameController.text,
                 "nama_sekolah": schoolNameController.text,
-                "kelas": selectedClass,
-                "gender": gender,
-                "foto": UserEmail.getUserPhotoUrl(),
+                "kelas": data.selectedClass,
+                "gender": data.gender,
+                "foto": data.userPhotoUrl,
               };
               print(json);
               final result = await AuthApi().postUpdateUSer(json);
@@ -152,27 +141,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0, backgroundColor: gender.toLowerCase() == "Laki-laki".toLowerCase()
-                              ? R.colors.primary
-                              : Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            side: BorderSide(
-                                width: 1, color: R.colors.greyBorder),
+                      child: Consumer<EditProfileProvider>(
+                        builder: (_, genderValue, __) => ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: genderValue.gender.toLowerCase() ==
+                                    "Laki-laki".toLowerCase()
+                                ? R.colors.primary
+                                : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(
+                                  width: 1, color: R.colors.greyBorder),
+                            ),
                           ),
-                        ),
-                        onPressed: () {
-                          onTapGender(Gender.lakiLaki);
-                        },
-                        child: Text(
-                          "Laki-laki",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: gender.toLowerCase() == "Laki-laki".toLowerCase()
-                                ? Colors.white
-                                : const Color(0xff282828),
+                          onPressed: () {
+                            genderValue.onTapGender(Gender.lakiLaki);
+                          },
+                          child: Text(
+                            "Laki-laki",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: genderValue.gender.toLowerCase() ==
+                                      "Laki-laki".toLowerCase()
+                                  ? Colors.white
+                                  : const Color(0xff282828),
+                            ),
                           ),
                         ),
                       ),
@@ -181,27 +175,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0, backgroundColor: gender == "Perempuan"
-                              ? R.colors.primary
-                              : Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            side: BorderSide(
-                                width: 1, color: R.colors.greyBorder),
+                      child: Consumer<EditProfileProvider>(
+                        builder: (_, genderValue, __) => ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: genderValue.gender == "Perempuan"
+                                ? R.colors.primary
+                                : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(
+                                  width: 1, color: R.colors.greyBorder),
+                            ),
                           ),
-                        ),
-                        onPressed: () {
-                          onTapGender(Gender.perempuan);
-                        },
-                        child: Text(
-                          "Perempuan",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: gender == "Perempuan"
-                                ? Colors.white
-                                : const Color(0xff282828),
+                          onPressed: () {
+                            genderValue.onTapGender(Gender.perempuan);
+                          },
+                          child: Text(
+                            "Perempuan",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: genderValue.gender == "Perempuan"
+                                  ? Colors.white
+                                  : const Color(0xff282828),
+                            ),
                           ),
                         ),
                       ),
@@ -226,21 +223,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   color: Colors.white,
                   border: Border.all(color: R.colors.greyBorder),
                 ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                      value: selectedClass,
-                      items: classSlta
-                          .map(
-                            (e) => DropdownMenuItem<String>(
-                              child: Text(e),
-                              value: e,
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (String? val) {
-                        selectedClass = val!;
-                        setState(() {});
-                      }),
+                child: Consumer<EditProfileProvider>(
+                  builder: (_, classValue, __) => DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                        value: classValue.selectedClass,
+                        items: classValue.classSlta
+                            .map(
+                              (e) => DropdownMenuItem<String>(
+                                child: Text(e),
+                                value: e,
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (String? val) {
+                          classValue.setClass(val);
+                        }),
+                  ),
                 ),
               ),
               const SizedBox(height: 5),

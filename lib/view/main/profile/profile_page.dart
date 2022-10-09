@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:git_project/constants/r.dart';
-import 'package:git_project/helpers/preference_helper.dart';
-import 'package:git_project/models/user_by_email.dart';
-import 'package:git_project/view/login_page.dart';
-import 'package:git_project/view/main/profile/edit_profile_page.dart';
+import '../../../constants/r.dart';
+import '../../../helpers/preference_helper.dart';
+import '../../../models/user_by_email.dart';
+import '../../../view/login_page.dart';
+import '../../../view/main/profile/edit_profile_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -25,9 +25,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    
-    super.initState();
     getUserData();
+    super.initState();
   }
 
   @override
@@ -119,8 +118,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           blurRadius: 7, color: Colors.black.withOpacity(0.25))
                     ],
                   ),
-                  margin: const EdgeInsets.symmetric(vertical: 18, horizontal: 13),
-                  padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 13),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 18, horizontal: 13),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 18, horizontal: 13),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -219,7 +220,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 13),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),

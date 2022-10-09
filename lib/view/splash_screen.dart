@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:git_project/constants/r.dart';
-import 'package:git_project/helpers/user_email.dart';
-import 'package:git_project/models/network_response.dart';
-import 'package:git_project/models/user_by_email.dart';
-import 'package:git_project/repository/auth_api.dart';
-import 'package:git_project/view/login_page.dart';
-import 'package:git_project/view/main_page.dart';
-import 'package:git_project/view/register_page.dart';
+import '../constants/r.dart';
+import '../helpers/user_email.dart';
+import '../models/network_response.dart';
+import '../models/user_by_email.dart';
+import '../repository/auth_api.dart';
+import '../view/login_page.dart';
+import '../view/main_page.dart';
+import '../view/register_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -22,9 +22,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 5), () async {
+    Future.delayed(const Duration(seconds: 5), () async {
       final user = UserEmail.getUserEmail();
-
       if (user != null) {
         final dataUser = await AuthApi().getUserByEmail();
         if (dataUser.status == Status.success) {

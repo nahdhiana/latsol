@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:git_project/constants/r.dart';
-import 'package:git_project/models/network_response.dart';
-import 'package:git_project/models/paket_soal_list.dart';
-import 'package:git_project/repository/latihan_soal_api.dart';
-import 'package:git_project/view/main/latihan_soal/kerjakan_latihan_soal_page.dart';
+import '../../../constants/r.dart';
+import '../../../models/network_response.dart';
+import '../../../models/paket_soal_list.dart';
+import '../../../repository/latihan_soal_api.dart';
+import '../../../view/main/latihan_soal/kerjakan_latihan_soal_page.dart';
 
 class PakeSoalPage extends StatefulWidget {
   const PakeSoalPage({Key? key, required this.id}) : super(key: key);

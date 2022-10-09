@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:git_project/constants/r.dart';
-import 'package:git_project/helpers/user_email.dart';
-import 'package:git_project/models/kerjakan_soal_list.dart';
-import 'package:git_project/models/network_response.dart';
-import 'package:git_project/repository/latihan_soal_api.dart';
-import 'package:git_project/view/main/latihan_soal/result_page.dart';
+import '../../../constants/r.dart';
+import '../../../helpers/user_email.dart';
+import '../../../models/kerjakan_soal_list.dart';
+import '../../../models/network_response.dart';
+import '../../../repository/latihan_soal_api.dart';
+import '../../../view/main/latihan_soal/result_page.dart';
 
 class KerjakanLatihanSoalPage extends StatefulWidget {
   const KerjakanLatihanSoalPage({Key? key, required this.id}) : super(key: key);
@@ -33,10 +33,10 @@ class _KerjakanLatihanSoalPageState extends State<KerjakanLatihanSoalPage>
   TabController? _controller;
   @override
   void initState() {
-    
     super.initState();
     getQuestionList();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +96,10 @@ class _KerjakanLatihanSoalPageState extends State<KerjakanLatihanSoalPage>
                               );
                             }));
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                content:
-                                    Text("Submit gagal. silahkan ulangi")));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text("Submit gagal. silahkan ulangi")));
                           }
                         }
                       } else {

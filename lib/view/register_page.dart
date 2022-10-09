@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:git_project/constants/r.dart';
-import 'package:git_project/helpers/preference_helper.dart';
-import 'package:git_project/helpers/user_email.dart';
-import 'package:git_project/models/network_response.dart';
-import 'package:git_project/models/user_by_email.dart';
-import 'package:git_project/repository/auth_api.dart';
-import 'package:git_project/view/login_page.dart';
-import 'package:git_project/view/main_page.dart';
+import '../constants/r.dart';
+import '../helpers/preference_helper.dart';
+import '../models/network_response.dart';
+import '../models/user_by_email.dart';
+import '../providers/reg_user_provider.dart';
+import '../repository/auth_api.dart';
+import '../view/login_page.dart';
+import 'package:provider/provider.dart';
+
+import 'main_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -15,40 +17,32 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-enum Gender { lakiLaki, perempuan }
-
 class _RegisterPageState extends State<RegisterPage> {
-  List<String> classSlta = ["10", "11", "12"];
-
-  String gender = "Laki-laki";
-  String selectedClass = "10";
   final emailController = TextEditingController();
   final schoolNameController = TextEditingController();
   final fullNameController = TextEditingController();
 
-  onTapGender(Gender genderInput) {
-    if (genderInput == Gender.lakiLaki) {
-      gender = "Laki-laki";
-    } else {
-      gender = "Perempuan";
-    }
-    setState(() {});
-  }
-
-  initDataUSer() {
-    emailController.text = UserEmail.getUserEmail()!;
-    fullNameController.text = UserEmail.getUserDisplayName()!;
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
-    initDataUSer();
+    Future.delayed(Duration.zero, () {
+      final dataUser = Provider.of<RegUserProvider>(context, listen: false);
+      emailController.text = dataUser.userEmail;
+      fullNameController.text = dataUser.userDisplayName;
+    });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    schoolNameController.dispose();
+    fullNameController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final data = Provider.of<RegUserProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: const Color(0xfff0f3f5),
       appBar: PreferredSize(
@@ -77,9 +71,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 "email": emailController.text,
                 "nama_lengkap": fullNameController.text,
                 "nama_sekolah": schoolNameController.text,
-                "kelas": selectedClass,
-                "gender": gender,
-                "foto": UserEmail.getUserPhotoUrl(),
+                "kelas": data.selectedClass,
+                "gender": data.gender,
+                "foto": data.userPhotoUrl,
               };
               print(json);
               final result = await AuthApi().postRegister(json);
@@ -148,27 +142,32 @@ class _RegisterPageState extends State<RegisterPage> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0, backgroundColor: gender.toLowerCase() == "Laki-laki".toLowerCase()
-                              ? R.colors.primary
-                              : Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            side: BorderSide(
-                                width: 1, color: R.colors.greyBorder),
+                      child: Consumer<RegUserProvider>(
+                        builder: (_, genderValue, __) => ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: genderValue.gender.toLowerCase() ==
+                                    "Laki-laki".toLowerCase()
+                                ? R.colors.primary
+                                : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(
+                                  width: 1, color: R.colors.greyBorder),
+                            ),
                           ),
-                        ),
-                        onPressed: () {
-                          onTapGender(Gender.lakiLaki);
-                        },
-                        child: Text(
-                          "Laki-laki",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: gender.toLowerCase() == "Laki-laki".toLowerCase()
-                                ? Colors.white
-                                : const Color(0xff282828),
+                          onPressed: () {
+                            genderValue.onTapGender(Gender.lakiLaki);
+                          },
+                          child: Text(
+                            "Laki-laki",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: genderValue.gender.toLowerCase() ==
+                                      "Laki-laki".toLowerCase()
+                                  ? Colors.white
+                                  : const Color(0xff282828),
+                            ),
                           ),
                         ),
                       ),
@@ -177,27 +176,30 @@ class _RegisterPageState extends State<RegisterPage> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0, backgroundColor: gender == "Perempuan"
-                              ? R.colors.primary
-                              : Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            side: BorderSide(
-                                width: 1, color: R.colors.greyBorder),
+                      child: Consumer<RegUserProvider>(
+                        builder: (_, genderValue, __) => ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: genderValue.gender == "Perempuan"
+                                ? R.colors.primary
+                                : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(
+                                  width: 1, color: R.colors.greyBorder),
+                            ),
                           ),
-                        ),
-                        onPressed: () {
-                          onTapGender(Gender.perempuan);
-                        },
-                        child: Text(
-                          "Perempuan",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: gender == "Perempuan"
-                                ? Colors.white
-                                : const Color(0xff282828),
+                          onPressed: () {
+                            genderValue.onTapGender(Gender.perempuan);
+                          },
+                          child: Text(
+                            "Perempuan",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: genderValue.gender == "Perempuan"
+                                  ? Colors.white
+                                  : const Color(0xff282828),
+                            ),
                           ),
                         ),
                       ),
@@ -222,23 +224,25 @@ class _RegisterPageState extends State<RegisterPage> {
                   color: Colors.white,
                   border: Border.all(color: R.colors.greyBorder),
                 ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                      value: selectedClass,
-                      items: classSlta
-                          .map(
-                            (e) => DropdownMenuItem<String>(
-                              child: Text(e),
-                              value: e,
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (String? val) {
-                        selectedClass = val!;
-                        setState(() {});
-                      }),
+                child: Consumer<RegUserProvider>(
+                  builder: (_, classValue, __) => DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                        value: classValue.selectedClass,
+                        items: classValue.classSlta
+                            .map(
+                              (e) => DropdownMenuItem<String>(
+                                child: Text(e),
+                                value: e,
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (String? val) {
+                          classValue.setClass(val);
+                        }),
+                  ),
                 ),
               ),
+
               const SizedBox(height: 5),
               RegisterTextField(
                 hintText: 'Nama Sekolah',
