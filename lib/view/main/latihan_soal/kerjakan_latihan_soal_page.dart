@@ -17,7 +17,11 @@ class KerjakanLatihanSoalPage extends StatefulWidget {
 
 class _KerjakanLatihanSoalPageState extends State<KerjakanLatihanSoalPage>
     with SingleTickerProviderStateMixin {
+  List<String> answer = [];
+  List<String> questionId = [];
+
   KerjakanSoalList? soalList;
+
   getQuestionList() async {
     final result = await LatihanSoalApi().postQuestionList(widget.id);
     if (result.status == Status.success) {
@@ -36,7 +40,6 @@ class _KerjakanLatihanSoalPageState extends State<KerjakanLatihanSoalPage>
     super.initState();
     getQuestionList();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +72,8 @@ class _KerjakanLatihanSoalPageState extends State<KerjakanLatihanSoalPage>
                         print(result);
                         if (result == true) {
                           print("kirim ke backend");
-                          List<String> answer = [];
-                          List<String> questionId = [];
 
-                          //soalList!.data!.forEach((element) {
-                          soalList!.data!.map((element) {
+                          soalList!.data!.forEach((element) {
                             questionId.add(element.bankQuestionId!);
                             answer.add(element.studentAnswer!);
                           });

@@ -13,6 +13,7 @@ class ResultPage extends StatefulWidget {
 
 class _ResultPageState extends State<ResultPage> {
   ResultResponse? resultData;
+
   getResult() async {
     final result = await LatihanSoalApi().getResult(widget.exerciseId);
     if (result.status == Status.success) {
@@ -23,9 +24,8 @@ class _ResultPageState extends State<ResultPage> {
 
   @override
   void initState() {
-    
-    super.initState();
     getResult();
+    super.initState();
   }
 
   @override

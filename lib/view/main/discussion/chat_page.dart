@@ -20,23 +20,23 @@ class _ChatPageState extends State<ChatPage> {
   final textController = TextEditingController();
   late CollectionReference chat;
   late QuerySnapshot chatData;
-  // List<QueryDocumentSnapshot>? listChat;
-  // getDataFromFirebase() async {
-  //   chatData = await FirebaseFirestore.instance
-  //       .collection("room")
-  //       .doc("kimia")
-  //       .collection("chat")
-  //       .get();
-  //   // listChat = chatData.docs;
-  //   setState(() {});
-  //   // print(chatData.docs);
-  // }
+  List<QueryDocumentSnapshot>? listChat;
+  getDataFromFirebase() async {
+    chatData = await FirebaseFirestore.instance
+        .collection("room")
+        .doc("kimia")
+        .collection("chat")
+        .get();
+    // listChat = chatData.docs;
+    setState(() {});
+    // print(chatData.docs);
+  }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // getDataFromFirebase();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    // getDataFromFirebase();
+  }
 
   @override
   Widget build(BuildContext context) {
